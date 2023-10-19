@@ -1,2 +1,5 @@
-﻿  test.c
+﻿  turtleGraphics.c
+C:\Users\param\OneDrive\Learn\BCIT\COMP 2511\Week04\Assignment04\TurtleGraphics\turtleGraphics.c(131,23): warning C4013: 'getTurtleDirection' undefined; assuming extern returning int
+C:\Users\param\OneDrive\Learn\BCIT\COMP 2511\Week04\Assignment04\TurtleGraphics\turtleGraphics.c(177,16): warning C4018: '>': signed/unsigned mismatch
+C:\Users\param\OneDrive\Learn\BCIT\COMP 2511\Week04\Assignment04\TurtleGraphics\turtleGraphics.c(191,16): warning C4018: '>': signed/unsigned mismatch
   TurtleGraphics.vcxproj -> C:\Users\param\OneDrive\Learn\BCIT\COMP 2511\Week04\Assignment04\TurtleGraphics\x64\Debug\TurtleGraphics.exe
