@@ -107,7 +107,7 @@ void moveTurtle(short[][NCOLS], const int, const enum Dirs, const short, int*, i
 void turtleDraw(const int cmds[])
 {
 	// turtle starts at position 0,0
-	int currentTurtlePosition[] = { STARTING_ROW, STARTING_COL };
+	unsigned int currentTurtlePosition[] = { STARTING_ROW, STARTING_COL };
 	// turtle starts with pen face down
 	short pen = STARTING_PEN_POSITION;
 	// turtle starts with direction facing south
@@ -125,9 +125,11 @@ void turtleDraw(const int cmds[])
 			case PEN_UP:	// pen up
 				pen = FALSE;
 				break;
+			
 			case PEN_DWN: // pen down
 				pen = TRUE;
 				break;
+			
 			case TURN_RIGHT:	// turn right
 				++direction; // for example, change from NORTH to EAST
 				if (direction >= END_VALUE)   // in case we turn right when facing WEST
@@ -135,6 +137,7 @@ void turtleDraw(const int cmds[])
 					direction = NORTH;
 				}
 				break;
+			
 			case TURN_LEFT: // turn left
 				--direction; // for example, change from NORTH to EAST
 				if (direction <= BEGIN_VALUE)   // in case we turn right when facing WEST
@@ -142,13 +145,16 @@ void turtleDraw(const int cmds[])
 					direction = WEST;
 				}
 				break;
+			
 			case MOVE: // move forward by some number
-				++cmdNo;						// becuase we have read 2 values
+				++cmdNo;	// becuase we have read 2 values during move, increment once here and pass the value to function
 				moveTurtle(floor, cmds[cmdNo], direction, pen, currentTurtlePosition, &currentTurtlePosition[1]);
 				break;
+			
 			case DISPLAY: // display floor
 				displayFloor(floor);
 				break;
+			
 			default:
 				puts("\n\nERROR - invalid command encountered in"
 					" turtleDraw() switch statement.\n\n");
@@ -167,10 +173,12 @@ void turtleDraw(const int cmds[])
 //      is automatically passed by reference.
 void moveTurtle(short floor[][NCOLS], const int numOfMoves, const enum Dirs currDir, const short penPos, int* rowPtr, int* colPtr)
 {
+	// loop numOfMoves times
 	for (int i = 0; i < numOfMoves; ++i)
 	{
 		if (penPos)
 		{
+			// intentionally incrementing value, to see if any value was over-written
 			++floor[*rowPtr][*colPtr];		// increment the value at position pointed by rowPtr and colPtr
 		}
 
@@ -184,23 +192,26 @@ void moveTurtle(short floor[][NCOLS], const int numOfMoves, const enum Dirs curr
 		}
 		else if (currDir == WEST)
 		{
+			// if there is room to decrement without going out the bounds
 			if (*colPtr > STARTING_COL)
 			{
-				--(*colPtr);
+				--(*colPtr);				// decrement the position represented by column pointer
 			}
 		}
 		else if (currDir == SOUTH)
 		{
+			// if there is room to increment without going out the bounds
 			if (*rowPtr < NROWS - 1)
 			{
-				++(*rowPtr);
+				++(*rowPtr);				// increment the position represented by row pointer
 			}
 		}
 		else if (currDir == NORTH)
 		{
-			if (*rowPtr > STARTING_ROW)
+			// if there is room to decrement without going out the bounds
+			if (*rowPtr > STARTING_ROW)		
 			{
-				--(*rowPtr);
+				--(*rowPtr);				// increment the position represented by row pointer
 			}
 		}	
 	}
@@ -211,12 +222,12 @@ void displayFloor(const short floorSurface[][NCOLS])
 {
 	//puts("Inside displayFloor\n\n");
 
-	for (int i = 0; i < NROWS; ++i)
+	for (int row = 0; row < NROWS; ++row)
 	{
-		for (int j = 0; j < NCOLS; ++j)
+		for (int col = 0; col < NCOLS; ++col)
 		{
 			//printf("i = % d; j = %d\n", i, j);
-			if (floorSurface[i][j])
+			if (floorSurface[row][col])
 			{
 				printf("*");
 			}

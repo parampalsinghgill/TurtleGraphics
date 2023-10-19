@@ -1,4 +1,4 @@
 ﻿  turtleGraphics.c
-C:\Users\param\OneDrive\Learn\BCIT\COMP 2511\Week04\Assignment04\TurtleGraphics\turtleGraphics.c(187,16): warning C4018: '>': signed/unsigned mismatch
-C:\Users\param\OneDrive\Learn\BCIT\COMP 2511\Week04\Assignment04\TurtleGraphics\turtleGraphics.c(201,16): warning C4018: '>': signed/unsigned mismatch
+C:\Users\param\OneDrive\Learn\BCIT\COMP 2511\Week04\Assignment04\TurtleGraphics\turtleGraphics.c(196,16): warning C4018: '>': signed/unsigned mismatch
+C:\Users\param\OneDrive\Learn\BCIT\COMP 2511\Week04\Assignment04\TurtleGraphics\turtleGraphics.c(212,16): warning C4018: '>': signed/unsigned mismatch
   TurtleGraphics.vcxproj -> C:\Users\param\OneDrive\Learn\BCIT\COMP 2511\Week04\Assignment04\TurtleGraphics\x64\Debug\TurtleGraphics.exe
