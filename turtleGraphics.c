@@ -9,29 +9,9 @@
 
 #include <stdio.h>
 
-#define NROWS 22 // number of rows in floor
-#define NCOLS 70 // number of colums in floor
-#define TRUE 1
-#define FALSE 0
-
-
 // function prototypes
 void turtleDraw(const int[]); // main function responsible for executing cmds
-void displayFloor(const short[][NCOLS]);
-void moveTurtle(short[][NCOLS], const int, const enum Dirs, const short, int*, int*);
 
-
-const unsigned int STARTING_ROW = 0;    // row that turtle will start in
-const unsigned int STARTING_COL = 0;    // column that turtle will start in
-
-enum TCmnds { PEN_UP = 1, PEN_DWN = 2, TURN_RIGHT = 3, TURN_LEFT = 4, MOVE = 5, DISPLAY = 6, END_OF_DATA = 9 };
-enum Dirs { BEGIN_VALUE, NORTH, EAST, SOUTH, WEST, END_VALUE };
-
-// direction that turtle will be facing at the start
-const enum Dirs STARTING_DIRECTION = SOUTH; 
-
-// Pen will be up when program starts; 0 (false) means pen up; 1 (true) means pen down
-const short STARTING_PEN_POSITION = FALSE; 
 
 int main()
 {
@@ -98,55 +78,85 @@ int main()
 	// Time to go home
 }
 
+
+// define 2 enum types
+enum TCmnds { PEN_UP = 1, PEN_DWN = 2, TURN_RIGHT = 3, TURN_LEFT = 4, MOVE = 5, DISPLAY = 6, END_OF_DATA = 9 };
+enum Dirs { BEGIN_VALUE, NORTH, EAST, SOUTH, WEST, END_VALUE };
+
+#define NROWS 22 // number of rows in floor
+#define NCOLS 70 // number of colums in floor
+#define TRUE 1
+#define FALSE 0
+
+const unsigned int STARTING_ROW = 0;    // row that turtle will start in
+const unsigned int STARTING_COL = 0;    // column that turtle will start in
+
+// direction that turtle will be facing at the start
+const enum Dirs STARTING_DIRECTION = SOUTH;
+
+// Pen will be up when program starts; 0 (false) means pen up; 1 (true) means pen down
+const short STARTING_PEN_POSITION = FALSE;
+
+// function prototypes
+void displayFloor(const short[][NCOLS]);
+void moveTurtle(short[][NCOLS], const int, const enum Dirs, const short, int*, int*);
+
+
+
 // turtleDraw() - function responsible for executing commands
 void turtleDraw(const int cmds[])
 {
 	// turtle starts at position 0,0
 	int currentTurtlePosition[] = { STARTING_ROW, STARTING_COL };
 	// turtle starts with pen face down
-	short penPosition = STARTING_PEN_POSITION;
+	short pen = STARTING_PEN_POSITION;
 	// turtle starts with direction facing south
-	enum Dirs turtleDirection = STARTING_DIRECTION;
+	enum Dirs direction = STARTING_DIRECTION;
 
 	// initialize array of floors NROWS by NCOLS with zeros
-	short floor[NROWS][NCOLS] = { {0}, {0} };
+	short floor[NROWS][NCOLS] = { FALSE };
 
-	int i = 0;
-	int numOfMoves = 0;
+	int cmdNo = 0;
 
-	enum TCmnds endOfData = END_OF_DATA;
-
-	while (cmds[i] != endOfData)
+	while (cmds[cmdNo] != END_OF_DATA)
 	{
-		switch (cmds[i])
+		switch (cmds[cmdNo])
 		{
-			case 1:	// pen up
-				penPosition = FALSE;
+			case PEN_UP:	// pen up
+				pen = FALSE;
 				break;
-			case 2: // pen down
-				penPosition = TRUE;
+			case PEN_DWN: // pen down
+				pen = TRUE;
 				break;
-			case 3:	// turn right
-			case 4: // turn left
-				turtleDirection = getTurtleDirection(turtleDirection, cmds[i]);
+			case TURN_RIGHT:	// turn right
+				++direction; // for example, change from NORTH to EAST
+				if (direction >= END_VALUE)   // in case we turn right when facing WEST
+				{
+					direction = NORTH;
+				}
 				break;
-			case 5: // move forward by some number
-
-				numOfMoves = cmds[i + 1];	// number of moves are given in next value.
-				++i;						// becuase we have read 2 values
-
-				moveTurtle(floor, numOfMoves, turtleDirection, penPosition, currentTurtlePosition, &currentTurtlePosition[1]);
+			case TURN_LEFT: // turn left
+				--direction; // for example, change from NORTH to EAST
+				if (direction <= BEGIN_VALUE)   // in case we turn right when facing WEST
+				{
+					direction = WEST;
+				}
 				break;
-			case 6: // display floor
+			case MOVE: // move forward by some number
+				++cmdNo;						// becuase we have read 2 values
+				moveTurtle(floor, cmds[cmdNo], direction, pen, currentTurtlePosition, &currentTurtlePosition[1]);
+				break;
+			case DISPLAY: // display floor
 				displayFloor(floor);
 				break;
 			default:
-				puts("Error. Unexpected case in switch statement. ");
-				break;
+				puts("\n\nERROR - invalid command encountered in"
+					" turtleDraw() switch statement.\n\n");
+				return;
 		}
 
 		// increment i to pick next command
-		++i;
+		++cmdNo;
 	}
 }
 
@@ -218,29 +228,3 @@ void displayFloor(const short floorSurface[][NCOLS])
 		puts("");	// new line after every row
 	}
 } // end of displayFloor()
-
-// Responsible for figuring out and returning the turtleDirection
-enum Dirs getTurtleDirection(enum Dirs currentTurtleDirection, int cmd)
-{
-	enum Dirs newDirection = currentTurtleDirection;
-
-	if (cmd == TURN_RIGHT)
-	{
-		newDirection = ++currentTurtleDirection;
-	}
-	else
-	{
-		newDirection = --currentTurtleDirection;
-	}
-
-	if (newDirection == END_VALUE)
-	{
-		newDirection = NORTH;
-	}
-	else if (newDirection == BEGIN_VALUE)
-	{
-		newDirection = WEST;
-	}
-
-	return newDirection;
-}
